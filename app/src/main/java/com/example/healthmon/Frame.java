@@ -14,6 +14,8 @@ package com.example.healthmon;
 public final class Frame {
 
     public int seq = -1;              // 帧序号
+    public long ts = 0;               // 【本地】到达时刻（毫秒）。上行帧里没有这个字段，
+                                      // 由接收方记录，供历史存储与曲线使用。
     public double bt = Double.NaN;    // 体温 ℃（GY-906）
     public int hr = -1;               // 心率 bpm（MAX30102）
     public int spo2 = -1;             // 血氧 %（MAX30102，P2 前恒为 -1）
