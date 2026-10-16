@@ -30,17 +30,16 @@ jobs:
         with:
           gradle-version: '8.4'
 
-      - name: Run pure-Java tests
-        # 用【与本地完全相同的命令】。
+      - name: Run all local gates
+        # 与本地完全同一条命令。
         #
-        # 早先这里是硬编码的类名清单，结果加了 DbSchema 之后：
-        # 本地绿（run-tests.js 按"不 import android.*"自动发现），
-        # CI 红（清单里没有 DbSchema，SqlTest 编译不过）。
-        # 同一个规则写在两个地方，就一定会漂移。
+        # 这里曾经是硬编码的类名清单，结果加了 DbSchema 之后本地绿、CI 红；
+        # 后来又因为"XML 注释里出现 --"连挂两次 —— 那个错本地 1 秒能查出来，
+        # 只是当时没有一个检查器为"XML 本身是否合法"负责。
         #
-        # 现在清单只有一份 —— 在 run-tests.js 里，CI 直接调它。
-        # 于是"本地绿"才真的意味着"CI 这一步也会绿"。
-        run: node tools/run-tests.js
+        # 现在五道门都在 check-all.js 里（XML / 资源引用 / 类型检查 / 纯 Java 测试 / 固件），
+        # CI 直接调它。于是"本地全过"就等于"CI 这一步也会过"。
+        run: node tools/check-all.js
 
       - name: Build debug APK
         # --stacktrace 让失败时的日志足够定位，不用重跑一次。

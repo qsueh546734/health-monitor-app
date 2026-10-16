@@ -37,7 +37,7 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <!-- ---------- 连接页 ---------- -->
+        <!-- ===== 连接页 ===== -->
         <ScrollView android:id="@+id/pageConnect" android:layout_width="match_parent" android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
@@ -66,7 +66,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- ---------- 主控页 ---------- -->
+        <!-- ===== 主控页 ===== -->
         <ScrollView android:id="@+id/pageControl" android:layout_width="match_parent" android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="12dp">
 
@@ -114,7 +114,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- ---------- 历史页 ---------- -->
+        <!-- ===== 历史页 ===== -->
         <LinearLayout android:id="@+id/pageHistory" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp">
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
@@ -137,7 +137,7 @@
             <TextView android:id="@+id/tvChartCount" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="12sp" android:text="—" />
         </LinearLayout>
 
-        <!-- ---------- 分析页 ---------- -->
+        <!-- ===== 分析页 ===== -->
         <LinearLayout android:id="@+id/pageAnalysis" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="12dp">
 
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
@@ -155,7 +155,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- ---------- 设置页 ---------- -->
+        <!-- ===== 设置页 ===== -->
         <ScrollView android:id="@+id/pageSettings" android:layout_width="match_parent" android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="12dp">
 
@@ -206,7 +206,7 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- ---------- 账号页 ---------- -->
+        <!-- ===== 账号页 ===== -->
         <ScrollView android:id="@+id/pageLogin" android:layout_width="match_parent" android:layout_height="match_parent">
             <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="16dp">
 
