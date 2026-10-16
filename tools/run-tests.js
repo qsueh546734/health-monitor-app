@@ -75,9 +75,21 @@ function findJavac(explicit) {
 //
 // 不维护硬编码清单：任何【不 import android.*】的类都自动纳入测试范围。
 // 这条规则就是"纯 Java 核心"这个架构约束本身，写在代码里而不是文档里。
+//
+// ⚠️ 必须先剥掉【块注释】再判断。
+// 只剥行注释是不够的：NetManager 的类文档里写了"刻意不依赖 android.os.Handler"，
+// 于是它被当成依赖 android 的类排除掉了 —— 而它其实是纯 Java 的。
+// 同一个陷阱（检查器把自己的文档当成代码）在本项目已经出现三次：
+//   1. check-firmware.js 把"绝对不能用 else if (g_client)"这句注释报成 bug
+//   2. 同一处的第二例
+//   3. 这里
+// 规则：任何做模式匹配的检查器，匹配前必须剥注释。
 function isPureJava(file) {
-  const text = fs.readFileSync(file, "utf8");
-  return !/^\s*import\s+android\./m.test(text) && !/\bandroid\.\w/.test(text.replace(/\/\/.*$/gm, ""));
+  const text = fs
+    .readFileSync(file, "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")   // 块注释
+    .replace(/\/\/[^\n]*/g, "");        // 行注释
+  return !/^\s*import\s+android\./m.test(text) && !/\bandroid\s*\./.test(text);
 }
 
 function listPureSources() {

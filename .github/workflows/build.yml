@@ -31,33 +31,16 @@ jobs:
           gradle-version: '8.4'
 
       - name: Run pure-Java tests
-        # 这些类不依赖 android.*，所以不需要 Android SDK 就能编译运行。
-        # 本地用 tools/run-tests.ps1 跑同一批测试。
-        run: |
-          set -e
-          if [ ! -d tools/tests ]; then
-            echo "no pure-Java tests yet"
-            exit 0
-          fi
-          SRC=app/src/main/java/com/example/healthmon
-          mkdir -p tools/out
-          PURE=""
-          for f in Frame Protocol LineAssembler AppState Simulator ChartData Auth; do
-            [ -f "$SRC/$f.java" ] && PURE="$PURE $SRC/$f.java"
-          done
-          if [ -z "$PURE" ]; then
-            echo "no pure-Java sources yet"
-            exit 0
-          fi
-          javac -encoding UTF-8 -d tools/out $PURE tools/tests/*.java
-          FAILED=0
-          for t in tools/tests/*Test.java; do
-            [ -e "$t" ] || continue
-            name=$(basename "$t" .java)
-            echo "== $name =="
-            java -cp tools/out "$name" || FAILED=1
-          done
-          exit $FAILED
+        # 用【与本地完全相同的命令】。
+        #
+        # 早先这里是硬编码的类名清单，结果加了 DbSchema 之后：
+        # 本地绿（run-tests.js 按"不 import android.*"自动发现），
+        # CI 红（清单里没有 DbSchema，SqlTest 编译不过）。
+        # 同一个规则写在两个地方，就一定会漂移。
+        #
+        # 现在清单只有一份 —— 在 run-tests.js 里，CI 直接调它。
+        # 于是"本地绿"才真的意味着"CI 这一步也会绿"。
+        run: node tools/run-tests.js
 
       - name: Build debug APK
         # --stacktrace 让失败时的日志足够定位，不用重跑一次
