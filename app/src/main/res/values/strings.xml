@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">健康监测</string>
+
+    <!-- Task 1 的管线验证文案，后续任务会替换 -->
+    <string name="hello">管线已打通</string>
+</resources>

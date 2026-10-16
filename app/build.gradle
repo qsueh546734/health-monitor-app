@@ -1,0 +1,30 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.example.healthmon'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.healthmon"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+// 刻意不写 dependencies —— 零第三方依赖是本项目的硬约束。
+// 每加一个依赖，云端构建的失败面就大一分，而本机没有 Android SDK 可以提前验证。

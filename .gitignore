@@ -1,0 +1,19 @@
+# 构建产物
+build/
+.gradle/
+*.apk
+*.aab
+
+# 本地测试输出
+tools/out/
+
+# 工作流用的临时件
+local.properties
+.idea/
+*.iml
+
+# 执行计划用的临时工作区（ledger、简要、审查包都在里面）
+.superpowers/
+
+# 本机探针留下的临时目录
+.tools/

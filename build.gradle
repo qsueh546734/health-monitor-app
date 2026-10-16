@@ -1,0 +1,5 @@
+// 本项目刻意保持零第三方依赖 —— 见设计文档 §7.1。
+// 这里只有 Android Gradle 插件本身，没有任何 dependencies 块。
+plugins {
+    id 'com.android.application' version '8.1.4' apply false
+}

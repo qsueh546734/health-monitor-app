@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- TCP 连设备 + HTTPS 调 DeepSeek -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- 没有 WiFi 也要能装（模拟器模式不需要网络），所以 required=false -->
+    <uses-feature android:name="android.hardware.wifi" android:required="false" />
+
+    <application
+        android:label="@string/app_name"
+        android:theme="@android:style/Theme.Material.Light"
+        android:allowBackup="false">
+
+        <!-- exported="true" 必须写：targetSdk>=31 时漏了它应用直接装不上 -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
