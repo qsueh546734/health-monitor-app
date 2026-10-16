@@ -13,6 +13,9 @@ public class View {
 
     public View(android.content.Context context) {}
 
+    /** XML 充气用的构造函数。自定义 View 必须有它，否则充气时抛 InflateException。 */
+    public View(android.content.Context context, android.util.AttributeSet attrs) {}
+
     /** 子类要覆写的生命周期钩子 —— 桩里给出空实现，子类才能正常编译 */
     protected void onDraw(android.graphics.Canvas canvas) {}
 

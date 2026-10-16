@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -38,6 +39,23 @@ public final class ChartView extends View {
 
     public ChartView(Context context) {
         super(context);
+        init();
+    }
+
+    /**
+     * XML 充气用的构造函数 —— 【不能省】。
+     *
+     * 自定义 View 写进布局文件后，Android 充气时找的是 (Context, AttributeSet)
+     * 这个签名。只有 (Context) 的话，setContentView 会在充气阶段抛
+     * InflateException —— 而 activity_main.xml 里所有页面是一次性充气的，
+     * 所以表现是"一打开就崩"，且崩在启动路径上很难看出是哪一行。
+     */
+    public ChartView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    private void init() {
         axisPaint.setColor(Color.DKGRAY);
         axisPaint.setStrokeWidth(2f);
 

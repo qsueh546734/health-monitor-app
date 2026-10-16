@@ -43,8 +43,15 @@ jobs:
         run: node tools/run-tests.js
 
       - name: Build debug APK
-        # --stacktrace 让失败时的日志足够定位，不用重跑一次
-        run: gradle assembleDebug --no-daemon --stacktrace
+        # --stacktrace 让失败时的日志足够定位，不用重跑一次。
+        #
+        # 关键：把构建输出 tee 到 diag/ 里。构建日志端点需要鉴权，
+        # 而失败时偏偏最需要它 —— 不落盘的话就只能让用户去网页上翻。
+        # set -o pipefail 保证 tee 不会把 gradle 的失败退出码吞掉。
+        run: |
+          set -o pipefail
+          mkdir -p diag
+          gradle assembleDebug --no-daemon --stacktrace 2>&1 | tee diag/build-log.txt
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
