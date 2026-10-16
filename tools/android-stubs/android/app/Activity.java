@@ -32,6 +32,9 @@ public class Activity extends Context {
 
     public Context getApplicationContext() { return null; }
 
+    /** 界面刷新必须回主线程 —— 桩里要有这个方法，否则所有 runOnUiThread 调用都编译不过 */
+    public void runOnUiThread(Runnable action) { action.run(); }
+
     /** 真实签名是 <T extends View> T findViewById(int)。桩里用 Object 会让调用点
      *  需要强转，反而掩盖类型错误 —— 所以至少要有个 View 类型。见 android/view/View.java。 */
     public android.view.View findViewById(int id) { return null; }

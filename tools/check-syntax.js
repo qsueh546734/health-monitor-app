@@ -141,6 +141,22 @@ const stubSources = fs.existsSync(STUB_DIR) ? walk(STUB_DIR).sort() : [];
 //
 // 手写一份 R 会随资源变化而过期（而且过期后是假绿灯：新加的资源没进去，
 // 引用它的代码反而报错，人就会去关掉这个检查）。所以按 res/ 现场生成。
+// 收集【所有】文件。
+//
+// ⚠️ 不能复用上面的 walk()：那是给 Java 源文件写的，只收 .java，
+// 传 res/ 进去会返回空数组 —— 于是生成的 R 类里一个 id 都没有，
+// 而所有 R.id.xxx 引用都会报"找不到符号"，把真错淹没在噪声里。
+function walkAll(dir) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) out.push(...walkAll(p));
+    else out.push(p);
+  }
+  return out;
+}
+
 function collectRes() {
   const kinds = ["layout", "id", "string", "color", "drawable", "menu", "dimen", "style"];
   const out = {};
@@ -178,7 +194,7 @@ function collectRes() {
   }
 
   // @+id/xxx 出现在任何 xml 里（layout 与 menu 都可能定义 id）
-  for (const f of walk(RES)) {
+  for (const f of walkAll(RES)) {
     if (!f.endsWith(".xml")) continue;
     const t = fs.readFileSync(f, "utf8");
     for (const m of t.matchAll(/@\+id\/([A-Za-z0-9_]+)/g)) out.id.add(m[1]);
@@ -189,6 +205,19 @@ function collectRes() {
 }
 
 const res = collectRes();
+
+// 守卫：有 layout 却生成不出 id，说明资源收集坏了。
+// 生成一个残缺的 R 会让所有 R.id.xxx 报"找不到符号"，
+// 把真错淹没在噪声里 —— 而噪声一多，人就会去关掉这个检查。
+const layoutCount = fs.existsSync(path.join(ROOT, "app/src/main/res/layout"))
+  ? fs.readdirSync(path.join(ROOT, "app/src/main/res/layout")).filter((f) => f.endsWith(".xml")).length
+  : 0;
+if (layoutCount > 0 && res.id.size === 0) {
+  console.error(`FATAL: 发现 ${layoutCount} 个布局文件，却一个 @+id 都没收集到。`);
+  console.error("       资源收集逻辑坏了 —— 生成的 R 会缺 id，导致满屏假错误。");
+  process.exit(2);
+}
+
 const GEN_DIR = path.join(ROOT, "tools/out/gen");
 fs.mkdirSync(path.join(GEN_DIR, "com/example/healthmon"), { recursive: true });
 
